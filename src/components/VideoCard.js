@@ -1,5 +1,5 @@
 const VideoCard = ({info})=>{
-    console.log(info)
+    if(!info) return null;
     const {snippet, statistics} = info;
     const {channelTitle, title, thumbnails} = snippet
     return(
@@ -12,6 +12,14 @@ const VideoCard = ({info})=>{
             </ul>
         </div>
     )
+}
+
+export const BorderedVideoCard = (VideoCard)=>{
+    return ({info})=>{
+        return <div className="border border-red-500">
+        <VideoCard info={info}/>
+        </div>
+    }
 }
 
 export default VideoCard;

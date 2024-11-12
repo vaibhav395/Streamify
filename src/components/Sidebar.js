@@ -6,7 +6,7 @@ const Sidebar = () => {
 
   if (!isMenuOpen) return null; //This is called early return
   return (
-    <div className="shadow-lg p-5 w-48 mt-2">
+    <div className="shadow-lg p-6 w-48 mt-2">
       <ul>
         <li className="my-2"><Link to={"/"}>🏠︎ Home</Link></li>
         <li className="my-2">🎬 Shorts</li>
