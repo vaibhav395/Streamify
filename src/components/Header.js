@@ -1,8 +1,9 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { toggleMenu } from "../utils/appSlice";
 import { useEffect, useState } from "react";
 import { YOUTUBE_SEARCH_API } from "../utils/constants";
+import { cachedResults } from "../utils/searchSlice";
 
 const Header = () => {
   const dispatch = useDispatch();
@@ -10,13 +11,27 @@ const Header = () => {
     dispatch(toggleMenu());
   };
 
+  const cachedQueries = useSelector((store)=>store.search); //This will give access to that empty object that we have 
+  //initialid in our searchSlice.
+
   const [searchQuery, setSearchQuery] = useState("");
   const [suggestions, setSuggestions] = useState([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
 
   useEffect(()=>{
     //make an api call after every key press but decline the api call is time b/w 2 key press is less than 200ms
-    const timer = setTimeout(()=>getSearchSuggestions(), 200);
+    const timer = setTimeout(()=>{
+      if(cachedQueries[searchQuery])
+        {
+          setSuggestions(cachedQueries[searchQuery]); //If your results are already present in cache
+          //then do not make the api call.
+        }
+        else
+        {
+          getSearchSuggestions();
+        }
+    }, 200);
+    
 
     return ()=>{
       clearTimeout(timer);  //Debouncing , here we are terminating the previous setTimeout
@@ -28,7 +43,12 @@ const Header = () => {
     const data = await fetch(YOUTUBE_SEARCH_API + searchQuery);
     const json = await data.json();
     setSuggestions(json[1]);
-    // console.log(json[1]);
+    
+
+    //Update the cache here, when API call is made
+    dispatch(cachedResults({
+      [searchQuery]:json[1],
+    }))
   }
   return (
     <div className="grid grid-flow-col shadow-lg bg-gray-50 p-2">
