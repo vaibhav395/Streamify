@@ -11,7 +11,7 @@ const LiveChat = () => {
   const chatMessages = useSelector((store) => store.chat.messages);
   useEffect(() => {
     const i = setInterval(() => {
-      console.log("API Pooling");
+      
 
       dispatch(
         addMessage({

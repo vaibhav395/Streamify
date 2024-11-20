@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { YOUTUBE_VIDEOS_API } from "../utils/constants";
-import VideoCard, { BorderedVideoCard } from "./VideoCard";
+// import VideoCard, { BorderedVideoCard } from "./VideoCard";
+import VideoCard from "./VideoCard";
 import { Link } from "react-router-dom";
 
 const VideoContainer = () => {
@@ -9,7 +10,7 @@ const VideoContainer = () => {
     getVideos();
   }, []);
 
-  const NewComponent = BorderedVideoCard(VideoCard); //This is an higer order component
+  // const NewComponent = BorderedVideoCard(VideoCard); //This is an higer order component
 
   const getVideos = async () => {
     const data = await fetch(YOUTUBE_VIDEOS_API);
@@ -18,7 +19,7 @@ const VideoContainer = () => {
   };
   return (
     <div className="flex flex-wrap cursor-pointer">
-      <NewComponent info={videos[0]}/>
+      {/* <NewComponent info={videos[0]}/>  This is example of higher order components */}
       {videos.map((video) => {
         return (
           <Link key={video.id} to={"/watch?v=" + video.id}>

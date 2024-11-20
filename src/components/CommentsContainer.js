@@ -6,9 +6,23 @@ const commentsData = [
     text: "Lorem ipsum halt div iquou",
     replies: [
       {
-        name: "Pranjal Thareja",
+        name: "Person 1",
         text: "Lorem ipsum gwjwn ayydhudh",
-        replies: [],
+        replies: [
+          {
+            name:"person 2",
+            text:"Lorem ipsum reply 2",
+            replies:[{
+              name:"Person 3",
+              text:"Lorem ipsum lite",
+              replies:[{
+                name:"Person 5",
+                text:"Lorem ipsum text another",
+                replies:[]
+              }]
+            }]
+          }
+        ],
       },
     ],
   },
@@ -16,11 +30,11 @@ const commentsData = [
     name: "Vaibhav Thareja",
     text: "Lorem ipsum halt div iquou",
     replies: [{
-        name:"Sudesh Singh",
+        name:"Person 3",
         text:"Reply here",
         replies:[
             {
-                name:"Virat Kohli",
+                name:"Person 4",
                 text:"hello another reply",
                 replies:[]
             }

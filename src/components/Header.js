@@ -11,45 +11,42 @@ const Header = () => {
     dispatch(toggleMenu());
   };
 
-  const cachedQueries = useSelector((store)=>store.search); //This will give access to that empty object that we have 
+  const cachedQueries = useSelector((store) => store.search); //This will give access to that empty object that we have
   //initialid in our searchSlice.
 
   const [searchQuery, setSearchQuery] = useState("");
   const [suggestions, setSuggestions] = useState([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
 
-  useEffect(()=>{
+  useEffect(() => {
     //make an api call after every key press but decline the api call is time b/w 2 key press is less than 200ms
-    const timer = setTimeout(()=>{
-      if(cachedQueries[searchQuery])
-        {
-          setSuggestions(cachedQueries[searchQuery]); //If your results are already present in cache
-          //then do not make the api call.
-        }
-        else
-        {
-          getSearchSuggestions();
-        }
+    const timer = setTimeout(() => {
+      if (cachedQueries[searchQuery]) {
+        setSuggestions(cachedQueries[searchQuery]); //If your results are already present in cache
+        //then do not make the api call.
+      } else {
+        getSearchSuggestions();
+      }
     }, 200);
-    
 
-    return ()=>{
-      clearTimeout(timer);  //Debouncing , here we are terminating the previous setTimeout
-    }
-  }, [searchQuery])
+    return () => {
+      clearTimeout(timer); //Debouncing , here we are terminating the previous setTimeout
+    };
+  }, [searchQuery]);
 
-  const getSearchSuggestions = async ()=>{
+  const getSearchSuggestions = async () => {
     console.log("API CALL ", searchQuery);
     const data = await fetch(YOUTUBE_SEARCH_API + searchQuery);
     const json = await data.json();
     setSuggestions(json[1]);
-    
 
     //Update the cache here, when API call is made
-    dispatch(cachedResults({
-      [searchQuery]:json[1],
-    }))
-  }
+    dispatch(
+      cachedResults({
+        [searchQuery]: json[1],
+      })
+    );
+  };
   return (
     <div className="grid grid-flow-col shadow-lg bg-gray-50 p-2">
       <div className="flex p-4 col-span-1">
@@ -68,25 +65,44 @@ const Header = () => {
 
       <div className="pt-8 col-span-10 ml-56">
         <div>
-        <input
-          className="w-1/2 rounded-l-full border border-gray-400 p-2"
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          type="text"
-          onFocus={()=>{setShowSuggestions(true)}}
-          onBlur={()=>{setShowSuggestions(false)}}
-        />
-        <button className="border border-gray-400 rounded-r-full p-2 bg-gray-100">
-          🔍
-        </button>
+          <input
+            className="w-1/2 rounded-l-full border border-gray-400 p-2"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            type="text"
+            onFocus={() => {
+              setShowSuggestions(true);
+            }}
+            onBlur={() => {
+              setShowSuggestions(false);
+              // setTimeout(()=>{setShowSuggestions(false)}, 100)
+            }}
+          />
+          <button className="border border-gray-400 rounded-r-full p-2 bg-gray-100">
+            🔍
+          </button>
         </div>
-        {showSuggestions && <div className=" absolute bg-white py-2 px-2 m-1 w-[29rem] rounded-lg border border-gray-200">
-          <ul>
-            {suggestions && suggestions.map((suggestion)=>{
-              return <li key={suggestion} className="py-2 px-3 shadow-sm hover:bg-gray-100 cursor-pointer">🔍 {suggestion}</li>  
-            })}
-          </ul>
-        </div>}
+        {showSuggestions && (
+          <div className=" absolute bg-white py-2 px-2 m-1 w-[29rem] rounded-lg border border-gray-200">
+            <ul>
+              {suggestions &&
+                suggestions.map((suggestion) => {
+                  return (
+                    <li
+                      key={suggestion}
+                      className="py-2 px-3 shadow-sm hover:bg-gray-100 cursor-pointer"
+                      onMouseDown={() => {
+                        setSearchQuery(suggestion);
+                        setShowSuggestions(false);
+                      }}
+                    >
+                      🔍 {suggestion}
+                    </li>
+                  );
+                })}
+            </ul>
+          </div>
+        )}
       </div>
 
       <div className="pt-7 col-span-1">
