@@ -52,7 +52,7 @@ const Header = () => {
       <div className="flex p-4 col-span-1">
         <img
           onClick={toggleMenuHandler}
-          className="h-14 cursor-pointer"
+          className="h-14 cursor-pointer "
           alt="menu"
           src="https://static.vecteezy.com/system/resources/previews/021/190/402/non_2x/hamburger-menu-filled-icon-in-transparent-background-basic-app-and-web-ui-bold-line-icon-eps10-free-vector.jpg"
         />
